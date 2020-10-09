@@ -1,2 +1,23 @@
-Python 3.6.5 (v3.6.5:f59c0932b4, Mar 28 2018, 17:00:18) [MSC v.1900 64 bit (AMD64)] on win32
-Type "copyright", "credits" or "license()" for more information.
+import tkinter as tk
+
+HEIGHT = 600
+WIDTH = 800
+
+root =tk.Tk()
+
+canvas = tk.Canvas(root, height = HEIGHT, width = WIDTH)
+canvas.pack()
+
+frame = tk.Frame(root, bg='#80c1ff') # 80c1ff hex for blue hex
+frame.place(relx=0.1,rely=0.1,relwidth=0.8,relheight= 0.8)
+
+button = tk.Button(frame, text = "Text button")
+button.pack()
+
+label = tk.Label(frame, text="This is a label", bg='yellow')
+label.pack()
+
+entry = tk.Entry(frame, bg='green')
+entry.pack()
+
+root.mainloop() 
