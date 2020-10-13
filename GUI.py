@@ -15,7 +15,7 @@ background_image = Image.open("image/Background.jpg")
 background_image = ImageOps.fit(background_image, (1000, 600))
 background_image = ImageTk.PhotoImage(background_image)
 
-<<<<<<< Updated upstream
+
 frame = tk.Frame(root, bg='#80c1ff') # 80c1ff hex for blue hex
 frame.place(relx=0.1,rely=0.1,relwidth=0.8,relheight= 0.8)
 
@@ -27,7 +27,7 @@ label.pack()
 
 entry = tk.Entry(frame, bg='green')
 entry.pack()
-=======
+
 background_label =  tk.Label(root, image = background_image)
 background_label.place(x = 0, y = 0,relwidth = 1, relheight = 1)
 
@@ -156,6 +156,6 @@ username_label2.place(relx = 0.25, rely = 0.38)
 password_label2.place(relx = 0.25, rely = 0.48)
 password_entry2.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
 
->>>>>>> Stashed changes
+
 
 root.mainloop() 
