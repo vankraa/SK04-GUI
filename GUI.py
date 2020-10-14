@@ -94,6 +94,7 @@ def frame1():
 	canvas_reg.place_forget()
 	canvas_log.place_forget()
 	canvas_front.place(x = 150, y = 50)
+	#canvas_front.delete('all')
 	Pacemaker_sign.place_forget()
 
 
@@ -124,6 +125,27 @@ def frame1():
 
 	Data.close()
 
+	User1 = tk.Button(canvas_front, text = "User: " + USERNAME[0], width = 30, height = 2, font = fontStyle2,command = lambda: log(0))
+	User2 = tk.Button(canvas_front, text = "User: " + USERNAME[1], width = 30, height = 2, font = fontStyle2,command = lambda: log(1))
+	User3 = tk.Button(canvas_front, text = "User: " + USERNAME[2], width = 30, height = 2, font = fontStyle2,command = lambda: log(2))
+	User4 = tk.Button(canvas_front, text = "User: " + USERNAME[3], width = 30, height = 2, font = fontStyle2,command = lambda: log(3))
+	User5 = tk.Button(canvas_front, text = "User: " + USERNAME[4], width = 30, height = 2, font = fontStyle2,command = lambda: log(4))
+	User6 = tk.Button(canvas_front, text = "User: " + USERNAME[5], width = 30, height = 2, font = fontStyle2,command = lambda: log(5))
+	User7 = tk.Button(canvas_front, text = "User: " + USERNAME[6], width = 30, height = 2, font = fontStyle2,command = lambda: log(6))
+	User8 = tk.Button(canvas_front, text = "User: " + USERNAME[7], width = 30, height = 2, font = fontStyle2,command = lambda: log(7))
+	User9 = tk.Button(canvas_front, text = "User: " + USERNAME[8], width = 30, height = 2, font = fontStyle2,command = lambda: log(8))
+	User10 = tk.Button(canvas_front, text = "User: " + USERNAME[9], width = 30, height = 2, font = fontStyle2,command = lambda: log(9))
+
+	User1.place(relx = 0.1, rely = 0.15)
+	User2.place(relx = 0.6, rely = 0.15)
+	User3.place(relx = 0.1, rely = 0.3)
+	User4.place(relx = 0.6, rely = 0.3)
+	User5.place(relx = 0.1, rely = 0.45)
+	User6.place(relx = 0.6, rely = 0.45)
+	User7.place(relx = 0.1, rely = 0.6)
+	User8.place(relx = 0.6, rely = 0.6)
+	User9.place(relx = 0.1, rely = 0.75)
+	User10.place(relx = 0.6, rely = 0.75)
 	canvas_front.place(x = 150, y = 50)
 
 def log(user_number):
@@ -142,6 +164,7 @@ def delete_user(user_num):
 	Data.commit()
 
 	Data.close()
+	frame1()
 
 def Reg():
 	canvas_front.place_forget()
@@ -160,27 +183,13 @@ def reg_username_password():
 					'password': password_entry.get()
 				}
 			)
-	'''
-	#fetch all of the data in the database
-	c.execute("SELECT *, oid FROM address")
-	records = c.fetchall()
 
-	USERNAME.clear()
-	PASSWORD.clear()
-	OID.clear()
-	for x in records:
-		USERNAME.append(x[0])
-		PASSWORD.append(x[1])
-		OID.append(str(x[2]))
-
-	for x in range(10-len(records)):
-		USERNAME.append("---")
-		PASSWORD.append("")
-		OID.append("")
-	'''
 	Data.commit()
 
 	Data.close()
+
+	username_entry.delete(0,END)
+	password_entry.delete(0,END)
 
 	frame1()
 
