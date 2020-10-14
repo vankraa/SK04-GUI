@@ -151,6 +151,8 @@ def frame1():
 def log(user_number):
 	canvas_front.place_forget()
 	canvas_log.place(x = 350, y = 50)
+	username_label2 = tk.Label(canvas_log, text = "Username:  " + USERNAME[user_number],font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
+	username_label2.place(relx = 0.25, rely = 0.38)
 
 def delete_user(user_num):
 	Data = sqlite3.connect('Users.db')
@@ -176,7 +178,7 @@ def reg_username_password():
 	c = Data.cursor()#data cursor
 
 	#write into the data base
-	if(username_entry.get()!= "" and password_entry.get()!= ""):
+	if(username_entry.get()!= "" and password_entry.get()!= "" and len(OID)<10):
 		c.execute("INSERT INTO address VALUES (:username, :password)",
 				{
 					'username': username_entry.get(),
@@ -192,9 +194,6 @@ def reg_username_password():
 	password_entry.delete(0,END)
 
 	frame1()
-
-
-
 
 
 
@@ -304,17 +303,13 @@ canvas_log = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
 
 submit_button2 = tk.Button(canvas_log, text = "Submit")
 back_button2 = tk.Button(canvas_log, image= back_image, command = frame1)
-username_label2 = tk.Label(canvas_log, text = "Username: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 password_label2=tk.Label(canvas_log, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 password_entry2=tk.Entry(canvas_log,font= fontStyle2)
 
-
 submit_button2.place(relx = 0.8, rely = 0.9)
 back_button2.place(relx = 0.2, rely = 0.88)
-username_label2.place(relx = 0.25, rely = 0.38)
 password_label2.place(relx = 0.25, rely = 0.48)
 password_entry2.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
-
 
 
 root.mainloop() 
