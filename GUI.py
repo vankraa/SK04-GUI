@@ -1,3 +1,4 @@
+from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk, ImageOps 
 import tkinter.font as tkFont
@@ -8,16 +9,36 @@ WIDTH = 1000
 
 root =tk.Tk()
 root.title('Heart Pacemaker')
-root.geometry("1000x600")
+root.geometry("1100x600")
 
 
 #Background image
-background_image = Image.open("image/Background.jpg")
-background_image = ImageOps.fit(background_image, (1000, 600))
-background_image = ImageTk.PhotoImage(background_image)
+class Background(Frame):
+    def __init__(self, master, *pargs):
+        Frame.__init__(self, master, *pargs)
 
-background_label =  tk.Label(root, image = background_image)
-background_label.place(x = 0, y = 0,relwidth = 1, relheight = 1)
+        self.image = Image.open("image/Background.jpg")
+        self.img_copy= self.image.copy()
+
+        self.background_image = ImageTk.PhotoImage(self.image)
+
+        self.background = Label(self, image=self.background_image)
+        self.background.pack(fill=BOTH, expand=YES)
+        self.background.bind('<Configure>', self._resize_image)
+
+    def _resize_image(self,event):
+
+        new_width = event.width
+        new_height = event.height
+
+        self.image = self.img_copy.resize((new_width, new_height))
+
+        self.background_image = ImageTk.PhotoImage(self.image)
+        self.background.configure(image =  self.background_image)
+
+
+e = Background(root)
+e.pack(fill=BOTH, expand=YES)
 
 #Images required
 start_image = Image.open("image/Start.png")
@@ -36,27 +57,27 @@ del_image = ImageTk.PhotoImage(del_image)
 
 def frame1():
 	Start.place_forget()
-	canvas_front.place(x = 100, y = 50)
+	canvas_front.place(x = 150, y = 50)
 	Pacemaker_sign.place_forget()
 
 def log(user_number):
 	canvas_front.place_forget()
-	canvas_log.place(x = 300, y = 50)
+	canvas_log.place(x = 350, y = 50)
 
 def delete_user(user_num):
 	return
 
 def Reg():
 	canvas_front.place_forget()
-	canvas_reg.place(x = 300, y = 50)
+	canvas_reg.place(x = 350, y = 50)
 
 def reg_back():
 	canvas_reg.place_forget()
-	canvas_front.place(x = 100, y = 50)
+	canvas_front.place(x = 150, y = 50)
 
 def log_back():
 	canvas_log.place_forget()
-	canvas_front.place(x = 100, y = 50)
+	canvas_front.place(x = 150, y = 50)
 
 
 
@@ -77,11 +98,9 @@ c.execute("""CREATE TABLE address(
 		password text)
 	""")
 '''
-
 Data.commit()
 
 Data.close()
-
 
 
 #Starting Page:
