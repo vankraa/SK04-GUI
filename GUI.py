@@ -53,31 +53,137 @@ back_image = ImageTk.PhotoImage(back_image)
 del_image = Image.open("image/delete.png")
 del_image = ImageTk.PhotoImage(del_image)
 
+#inital username/passwords
+USERNAME = ["---"]*10
+PASSWORD = [None]*10
+OID = [None]*10
+
+
+Data = sqlite3.connect('Users.db')
+c = Data.cursor()#data cursor
+
+#fetch all of the data in database
+c.execute("SELECT *, oid FROM address")
+records = c.fetchall()
+
+num = len(records)
+
+USERNAME.clear()
+PASSWORD.clear()
+OID.clear()
+for x in records:
+	USERNAME.append(x[0])
+	PASSWORD.append(x[1])
+	OID.append(str(x[2]))
+
+for x in range(10-num):
+	USERNAME.append("---")
+	PASSWORD.append("")
+	OID.append("")
+
+Data.commit()
+
+Data.close()
+
+
+
 
 
 def frame1():
 	Start.place_forget()
+	canvas_reg.place_forget()
+	canvas_log.place_forget()
 	canvas_front.place(x = 150, y = 50)
 	Pacemaker_sign.place_forget()
+
+
+	Data = sqlite3.connect('Users.db')
+
+	c = Data.cursor()#data cursor
+
+	#fetch all of the data in database
+	c.execute("SELECT *, oid FROM address")
+	records = c.fetchall()
+
+	num = len(records)
+
+	USERNAME.clear()
+	PASSWORD.clear()
+	OID.clear()
+	for x in records:
+		USERNAME.append(x[0])
+		PASSWORD.append(x[1])
+		OID.append(str(x[2]))
+
+	for x in range(10-num):
+		USERNAME.append("---")
+		PASSWORD.append("")
+		OID.append("")
+
+	Data.commit()
+
+	Data.close()
+
+	canvas_front.place(x = 150, y = 50)
 
 def log(user_number):
 	canvas_front.place_forget()
 	canvas_log.place(x = 350, y = 50)
 
 def delete_user(user_num):
-	return
+	Data = sqlite3.connect('Users.db')
+
+	c = Data.cursor()#data cursor
+
+	#Delete a record from database
+	if(OID[user_num] != ""):
+		c.execute("DELETE from address WHERE oid ="+ OID[user_num])
+
+	Data.commit()
+
+	Data.close()
 
 def Reg():
 	canvas_front.place_forget()
 	canvas_reg.place(x = 350, y = 50)
 
-def reg_back():
-	canvas_reg.place_forget()
-	canvas_front.place(x = 150, y = 50)
+def reg_username_password():
+	Data = sqlite3.connect('Users.db')
 
-def log_back():
-	canvas_log.place_forget()
-	canvas_front.place(x = 150, y = 50)
+	c = Data.cursor()#data cursor
+
+	#write into the data base
+	if(username_entry.get()!= "" and password_entry.get()!= ""):
+		c.execute("INSERT INTO address VALUES (:username, :password)",
+				{
+					'username': username_entry.get(),
+					'password': password_entry.get()
+				}
+			)
+	'''
+	#fetch all of the data in the database
+	c.execute("SELECT *, oid FROM address")
+	records = c.fetchall()
+
+	USERNAME.clear()
+	PASSWORD.clear()
+	OID.clear()
+	for x in records:
+		USERNAME.append(x[0])
+		PASSWORD.append(x[1])
+		OID.append(str(x[2]))
+
+	for x in range(10-len(records)):
+		USERNAME.append("---")
+		PASSWORD.append("")
+		OID.append("")
+	'''
+	Data.commit()
+
+	Data.close()
+
+	frame1()
+
 
 
 
@@ -88,20 +194,21 @@ fontStyle2 = tkFont.Font(family="Times New Roman", size=10)
 
 # Databases
 # Create a username database
+'''
 Data = sqlite3.connect('Users.db')
 
 c = Data.cursor()#data cursor
-'''
+
 #create database for the first time commented after
 c.execute("""CREATE TABLE address(
 		username text,
 		password text)
 	""")
-'''
+
 Data.commit()
 
 Data.close()
-
+'''
 
 #Starting Page:
 canvas_front = tk.Canvas(root, height = HEIGHT-100, width = WIDTH-200, bg = "#80aaff")
@@ -115,27 +222,27 @@ Start.place(relx = 0.76, rely=0.5)
 
 
 #Front page front canvas
-User1 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(0))
-User2 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(1))
-User3 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(2))
-User4 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(3))
-User5 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(4))
-User6 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(5))
-User7 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(6))
-User8 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(7))
-User9 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(8))
-User10 = tk.Button(canvas_front, text = "User: ", width = 30, height = 2, font = fontStyle2,command = lambda: log(9))
+User1 = tk.Button(canvas_front, text = "User: " + USERNAME[0], width = 30, height = 2, font = fontStyle2,command = lambda: log(0))
+User2 = tk.Button(canvas_front, text = "User: " + USERNAME[1], width = 30, height = 2, font = fontStyle2,command = lambda: log(1))
+User3 = tk.Button(canvas_front, text = "User: " + USERNAME[2], width = 30, height = 2, font = fontStyle2,command = lambda: log(2))
+User4 = tk.Button(canvas_front, text = "User: " + USERNAME[3], width = 30, height = 2, font = fontStyle2,command = lambda: log(3))
+User5 = tk.Button(canvas_front, text = "User: " + USERNAME[4], width = 30, height = 2, font = fontStyle2,command = lambda: log(4))
+User6 = tk.Button(canvas_front, text = "User: " + USERNAME[5], width = 30, height = 2, font = fontStyle2,command = lambda: log(5))
+User7 = tk.Button(canvas_front, text = "User: " + USERNAME[6], width = 30, height = 2, font = fontStyle2,command = lambda: log(6))
+User8 = tk.Button(canvas_front, text = "User: " + USERNAME[7], width = 30, height = 2, font = fontStyle2,command = lambda: log(7))
+User9 = tk.Button(canvas_front, text = "User: " + USERNAME[8], width = 30, height = 2, font = fontStyle2,command = lambda: log(8))
+User10 = tk.Button(canvas_front, text = "User: " + USERNAME[9], width = 30, height = 2, font = fontStyle2,command = lambda: log(9))
 
-u1_del = tk.Button(canvas_front, image = del_image,command = lambda: delte_user(0))
-u2_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(1))
-u3_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(2))
-u4_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(3))
-u5_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(4))
-u6_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(5))
-u7_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(6))
-u8_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(7))
-u9_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(8))
-u10_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(9))
+u1_del = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(0))
+u2_de2 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(1))
+u3_de3 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(2))
+u4_de4 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(3))
+u5_de5 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(4))
+u6_de6 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(5))
+u7_de7 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(6))
+u8_de8 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(7))
+u9_de9 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(8))
+u10_del0 = tk.Button(canvas_front, image = del_image,command = lambda: delete_user(9))
 
 Register = tk.Button(canvas_front, image = reg_image, command = Reg)
 
@@ -151,15 +258,15 @@ User9.place(relx = 0.1, rely = 0.75)
 User10.place(relx = 0.6, rely = 0.75)
 
 u1_del.place(relx = 0.38, rely = 0.16)
-u2_del.place(relx = 0.88, rely = 0.16)
-u3_del.place(relx = 0.38, rely = 0.31)
-u4_del.place(relx = 0.88, rely = 0.31)
-u5_del.place(relx = 0.38, rely = 0.46)
-u6_del.place(relx = 0.88, rely = 0.46)
-u7_del.place(relx = 0.38, rely = 0.61)
-u8_del.place(relx = 0.88, rely = 0.61)
-u9_del.place(relx = 0.38, rely = 0.76)
-u10_del.place(relx = 0.88, rely = 0.76)
+u2_de2.place(relx = 0.88, rely = 0.16)
+u3_de3.place(relx = 0.38, rely = 0.31)
+u4_de4.place(relx = 0.88, rely = 0.31)
+u5_de5.place(relx = 0.38, rely = 0.46)
+u6_de6.place(relx = 0.88, rely = 0.46)
+u7_de7.place(relx = 0.38, rely = 0.61)
+u8_de8.place(relx = 0.88, rely = 0.61)
+u9_de9.place(relx = 0.38, rely = 0.76)
+u10_del0.place(relx = 0.88, rely = 0.76)
 
 Register.place(relx =0.82,rely = 0.87)
 
@@ -167,8 +274,8 @@ Register.place(relx =0.82,rely = 0.87)
 #Register canvas
 canvas_reg = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
 
-submit_button = tk.Button(canvas_reg, text = "Submit")
-back_button = tk.Button(canvas_reg, image= back_image, command = reg_back)
+submit_button = tk.Button(canvas_reg, text = "Submit", command = reg_username_password)
+back_button = tk.Button(canvas_reg, image= back_image, command = frame1)
 username_label=tk.Label(canvas_reg, text = "Username: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 username_entry=tk.Entry(canvas_reg,font= fontStyle2)
 password_label=tk.Label(canvas_reg, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
@@ -187,7 +294,7 @@ password_entry.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
 canvas_log = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
 
 submit_button2 = tk.Button(canvas_log, text = "Submit")
-back_button2 = tk.Button(canvas_log, image= back_image, command = log_back)
+back_button2 = tk.Button(canvas_log, image= back_image, command = frame1)
 username_label2 = tk.Label(canvas_log, text = "Username: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 password_label2=tk.Label(canvas_log, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 password_entry2=tk.Entry(canvas_log,font= fontStyle2)
