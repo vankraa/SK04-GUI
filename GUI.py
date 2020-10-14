@@ -195,6 +195,11 @@ def reg_username_password():
 
 	frame1()
 
+def Program_frame():
+	text = username_label2.cget("text")
+	num = len(text)
+	print(text[12:num])
+
 
 
 fontStyle = tkFont.Font(family="Blackadder ITC", size=25)
@@ -301,12 +306,14 @@ password_entry.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
 #Log in Canvas
 canvas_log = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
 
-submit_button2 = tk.Button(canvas_log, text = "Submit")
+submit_button2 = tk.Button(canvas_log, text = "Submit", command = Program_frame)
+username_label2 = tk.Label(canvas_log, text = "Username:  ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 back_button2 = tk.Button(canvas_log, image= back_image, command = frame1)
 password_label2=tk.Label(canvas_log, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
 password_entry2=tk.Entry(canvas_log,font= fontStyle2)
 
 submit_button2.place(relx = 0.8, rely = 0.9)
+username_label2.place(relx = 0.25, rely = 0.38)
 back_button2.place(relx = 0.2, rely = 0.88)
 password_label2.place(relx = 0.25, rely = 0.48)
 password_entry2.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
