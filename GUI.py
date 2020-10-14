@@ -4,8 +4,11 @@ from PIL import Image, ImageTk, ImageOps
 import tkinter.font as tkFont
 import sqlite3
 
-HEIGHT = 600
-WIDTH = 1000
+HEIGHT = 600   #dimension of the starting window
+WIDTH = 1000   #dimension of the starting window
+USER_ON = None        #Indicate which user is logged in
+CANVAS_BACKGROUND_COLOR = "#80aaff"
+
 
 root =tk.Tk()
 root.title('Heart Pacemaker')
@@ -55,7 +58,7 @@ del_image = ImageTk.PhotoImage(del_image)
 
 #inital username/passwords
 USERNAME = ["---"]*10
-PASSWORD = [None]*10
+PASSWORD = []
 OID = [None]*10
 
 
@@ -78,15 +81,12 @@ for x in records:
 
 for x in range(10-num):
 	USERNAME.append("---")
-	PASSWORD.append("")
 	OID.append("")
 
 Data.commit()
 
 Data.close()
-
-
-
+global canvas_front
 
 
 def frame1():
@@ -94,7 +94,6 @@ def frame1():
 	canvas_reg.place_forget()
 	canvas_log.place_forget()
 	canvas_front.place(x = 150, y = 50)
-	#canvas_front.delete('all')
 	Pacemaker_sign.place_forget()
 
 
@@ -105,7 +104,6 @@ def frame1():
 	#fetch all of the data in database
 	c.execute("SELECT *, oid FROM address")
 	records = c.fetchall()
-
 	num = len(records)
 
 	USERNAME.clear()
@@ -118,41 +116,35 @@ def frame1():
 
 	for x in range(10-num):
 		USERNAME.append("---")
-		PASSWORD.append("")
 		OID.append("")
+
+	User1.configure(text = "User: " + USERNAME[0])
+	User2.configure(text = "User: " + USERNAME[1])
+	User3.configure(text = "User: " + USERNAME[2])
+	User4.configure(text = "User: " + USERNAME[3])
+	User5.configure(text = "User: " + USERNAME[4])
+	User6.configure(text = "User: " + USERNAME[5])
+	User7.configure(text = "User: " + USERNAME[6])
+	User8.configure(text = "User: " + USERNAME[7])
+	User9.configure(text = "User: " + USERNAME[8])
+	User10.configure(text = "User: " + USERNAME[9])
 
 	Data.commit()
 
 	Data.close()
 
-	User1 = tk.Button(canvas_front, text = "User: " + USERNAME[0], width = 30, height = 2, font = fontStyle2,command = lambda: log(0))
-	User2 = tk.Button(canvas_front, text = "User: " + USERNAME[1], width = 30, height = 2, font = fontStyle2,command = lambda: log(1))
-	User3 = tk.Button(canvas_front, text = "User: " + USERNAME[2], width = 30, height = 2, font = fontStyle2,command = lambda: log(2))
-	User4 = tk.Button(canvas_front, text = "User: " + USERNAME[3], width = 30, height = 2, font = fontStyle2,command = lambda: log(3))
-	User5 = tk.Button(canvas_front, text = "User: " + USERNAME[4], width = 30, height = 2, font = fontStyle2,command = lambda: log(4))
-	User6 = tk.Button(canvas_front, text = "User: " + USERNAME[5], width = 30, height = 2, font = fontStyle2,command = lambda: log(5))
-	User7 = tk.Button(canvas_front, text = "User: " + USERNAME[6], width = 30, height = 2, font = fontStyle2,command = lambda: log(6))
-	User8 = tk.Button(canvas_front, text = "User: " + USERNAME[7], width = 30, height = 2, font = fontStyle2,command = lambda: log(7))
-	User9 = tk.Button(canvas_front, text = "User: " + USERNAME[8], width = 30, height = 2, font = fontStyle2,command = lambda: log(8))
-	User10 = tk.Button(canvas_front, text = "User: " + USERNAME[9], width = 30, height = 2, font = fontStyle2,command = lambda: log(9))
 
-	User1.place(relx = 0.1, rely = 0.15)
-	User2.place(relx = 0.6, rely = 0.15)
-	User3.place(relx = 0.1, rely = 0.3)
-	User4.place(relx = 0.6, rely = 0.3)
-	User5.place(relx = 0.1, rely = 0.45)
-	User6.place(relx = 0.6, rely = 0.45)
-	User7.place(relx = 0.1, rely = 0.6)
-	User8.place(relx = 0.6, rely = 0.6)
-	User9.place(relx = 0.1, rely = 0.75)
-	User10.place(relx = 0.6, rely = 0.75)
-	canvas_front.place(x = 150, y = 50)
 
 def log(user_number):
+	global username_label2
 	canvas_front.place_forget()
 	canvas_log.place(x = 350, y = 50)
-	username_label2 = tk.Label(canvas_log, text = "Username:  " + USERNAME[user_number],font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
-	username_label2.place(relx = 0.25, rely = 0.38)
+	
+	global USER_ON
+	USER_ON = user_number
+	username_label2.configure(text = "Username:  " + USERNAME[user_number])
+
+
 
 def delete_user(user_num):
 	Data = sqlite3.connect('Users.db')
@@ -178,7 +170,7 @@ def reg_username_password():
 	c = Data.cursor()#data cursor
 
 	#write into the data base
-	if(username_entry.get()!= "" and password_entry.get()!= "" and len(OID)<10):
+	if(username_entry.get()!= "" and password_entry.get()!= "" and len(PASSWORD)<10):
 		c.execute("INSERT INTO address VALUES (:username, :password)",
 				{
 					'username': username_entry.get(),
@@ -195,15 +187,20 @@ def reg_username_password():
 
 	frame1()
 
-def Program_frame():
-	text = username_label2.cget("text")
-	num = len(text)
-	print(text[12:num])
-
+def program_frame():
+	text = password_entry2.get()
+	password_entry2.delete(0,END) 					#Clear the entry
+	if(text == PASSWORD[USER_ON]):					#Check if the password entered is correct
+		canvas_interface.place(x = 50, y = 25)
+		canvas_log.place_forget()
+	else:
+		pass_wrong = tk.Label(canvas_log, text = "Wrong Password, please try again!", font = fontStyle2 ,bg = CANVAS_BACKGROUND_COLOR)
+		pass_wrong.place(relx = 0.26,rely = 0.55)
 
 
 fontStyle = tkFont.Font(family="Blackadder ITC", size=25)
 fontStyle2 = tkFont.Font(family="Times New Roman", size=10)
+fontStyle3 = tkFont.Font(family="Blackadder ITC", size=15)
 
 # Databases
 # Create a username database
@@ -224,8 +221,6 @@ Data.close()
 '''
 
 #Starting Page:
-canvas_front = tk.Canvas(root, height = HEIGHT-100, width = WIDTH-200, bg = "#80aaff")
-
 Pacemaker_sign=tk.Label(root, text = "Pacemaker Interface", font = fontStyle,bg = "#3333ff", fg = "#ffff80")
 Pacemaker_sign.place(relx = 0.1, rely = 0.15)
 
@@ -235,6 +230,8 @@ Start.place(relx = 0.76, rely=0.5)
 
 
 #Front page front canvas
+canvas_front = tk.Canvas(root, height = HEIGHT-100, width = WIDTH-200, bg = CANVAS_BACKGROUND_COLOR)
+
 User1 = tk.Button(canvas_front, text = "User: " + USERNAME[0], width = 30, height = 2, font = fontStyle2,command = lambda: log(0))
 User2 = tk.Button(canvas_front, text = "User: " + USERNAME[1], width = 30, height = 2, font = fontStyle2,command = lambda: log(1))
 User3 = tk.Button(canvas_front, text = "User: " + USERNAME[2], width = 30, height = 2, font = fontStyle2,command = lambda: log(2))
@@ -285,13 +282,13 @@ Register.place(relx =0.82,rely = 0.87)
 
 
 #Register canvas
-canvas_reg = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
+canvas_reg = tk.Canvas(root, height = 500, width = 400, bg = CANVAS_BACKGROUND_COLOR)
 
 submit_button = tk.Button(canvas_reg, text = "Submit", command = reg_username_password)
 back_button = tk.Button(canvas_reg, image= back_image, command = frame1)
-username_label=tk.Label(canvas_reg, text = "Username: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
+username_label=tk.Label(canvas_reg, text = "Username: ",font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 username_entry=tk.Entry(canvas_reg,font= fontStyle2)
-password_label=tk.Label(canvas_reg, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
+password_label=tk.Label(canvas_reg, text = "Password: ",font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 password_entry=tk.Entry(canvas_reg,font= fontStyle2)
 
 
@@ -304,19 +301,32 @@ password_entry.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
 
 
 #Log in Canvas
-canvas_log = tk.Canvas(root, height = 500, width = 400, bg = "#80aaff")
+canvas_log = tk.Canvas(root, height = 500, width = 400, bg = CANVAS_BACKGROUND_COLOR)
 
-submit_button2 = tk.Button(canvas_log, text = "Submit", command = Program_frame)
-username_label2 = tk.Label(canvas_log, text = "Username:  ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
+submit_button2 = tk.Button(canvas_log, text = "Submit", command = program_frame)
 back_button2 = tk.Button(canvas_log, image= back_image, command = frame1)
-password_label2=tk.Label(canvas_log, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = "#80aaff", fg = "#990000")
+password_label2=tk.Label(canvas_log, text = "Password: ",font = tkFont.Font(family="Blackadder ITC", size=15), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 password_entry2=tk.Entry(canvas_log,font= fontStyle2)
+username_label2 = tk.Label(canvas_log, text = "Username:  ",font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 
 submit_button2.place(relx = 0.8, rely = 0.9)
-username_label2.place(relx = 0.25, rely = 0.38)
 back_button2.place(relx = 0.2, rely = 0.88)
 password_label2.place(relx = 0.25, rely = 0.48)
 password_entry2.place(relx = 0.45,rely = 0.5, relwidth = 0.3)
+username_label2.place(relx = 0.25, rely = 0.38)
 
+
+
+#USER INTERFACE CANVAS
+canvas_interface = tk.Canvas(root, height = HEIGHT-50, width = WIDTH, bg = CANVAS_BACKGROUND_COLOR)
+AOO_mode = tk.Button(canvas_interface, text = "AOO", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+VOO_mode = tk.Button(canvas_interface, text = "VOO", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+AAI_mode = tk.Button(canvas_interface, text = "AOO", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+VVI_mode = tk.Button(canvas_interface, text = "AOO", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+
+AOO_mode.place(rely = 0.05, relx = 0.1)
+VOO_mode.place(rely = 0.05, relx = 0.35)
+AAI_mode.place(rely = 0.05, relx = 0.6)
+VVI_mode.place(rely = 0.05, relx = 0.85)
 
 root.mainloop() 
