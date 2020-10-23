@@ -60,6 +60,7 @@ del_image = ImageTk.PhotoImage(del_image)
 USERNAME = ["---"]*10
 PASSWORD = []
 OID = [None]*10
+Error_text = ""
 
 
 Data = sqlite3.connect('Users.db')
@@ -325,6 +326,7 @@ AAI_mode = tk.Button(canvas_interface, text = "AAI", font = fontStyle3, bg = CAN
 VVI_mode = tk.Button(canvas_interface, text = "VVI", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 connected = canvas_interface.create_oval(10,10,20,20,fill = "red")
 connected_label = tk.Label(canvas_interface, text = "Connected", font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+Error_label = tk.Label(canvas_interface, text = "Error"+Error_text, font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000"))
 
 AOO_mode.place(rely = 0.05, relx = 0.1)
 VOO_mode.place(rely = 0.05, relx = 0.35)
