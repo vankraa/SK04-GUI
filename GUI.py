@@ -60,7 +60,6 @@ del_image = ImageTk.PhotoImage(del_image)
 USERNAME = ["---"]*10
 PASSWORD = []
 OID = [None]*10
-Error_text = ""
 
 
 Data = sqlite3.connect('Users.db')
@@ -119,6 +118,7 @@ def frame1():
 		USERNAME.append("---")
 		OID.append("")
 
+	#refresh the user names for each button
 	User1.configure(text = "User: " + USERNAME[0])
 	User2.configure(text = "User: " + USERNAME[1])
 	User3.configure(text = "User: " + USERNAME[2])
@@ -191,12 +191,17 @@ def reg_username_password():
 def program_frame():
 	text = password_entry2.get()
 	password_entry2.delete(0,END) 					#Clear the entry
+	Diff_Pacemaker.place(rely = 0.008, relx = 0.45)
+	Diff_Pacemaker.after(2500,lambda: Diff_Pacemaker.config(text = 'disappear'))
 	if(text == PASSWORD[USER_ON]):					#Check if the password entered is correct
 		canvas_interface.place(x = 50, y = 25)
 		canvas_log.place_forget()
 	else:
 		pass_wrong = tk.Label(canvas_log, text = "Wrong Password, please try again!", font = fontStyle2 ,bg = CANVAS_BACKGROUND_COLOR)
 		pass_wrong.place(relx = 0.26,rely = 0.55)
+		print(USER_ON)
+		print(USERNAME)
+		print(PASSWORD)
 
 
 fontStyle = tkFont.Font(family="Blackadder ITC", size=25)
@@ -326,12 +331,13 @@ AAI_mode = tk.Button(canvas_interface, text = "AAI", font = fontStyle3, bg = CAN
 VVI_mode = tk.Button(canvas_interface, text = "VVI", font = fontStyle3, bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 connected = canvas_interface.create_oval(10,10,20,20,fill = "red")
 connected_label = tk.Label(canvas_interface, text = "Connected", font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
-Error_label = tk.Label(canvas_interface, text = "Error"+Error_text, font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000"))
+Diff_Pacemaker = tk.Label(canvas_interface, text = "A New Pacemaker detected", font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 
 AOO_mode.place(rely = 0.05, relx = 0.1)
 VOO_mode.place(rely = 0.05, relx = 0.35)
 AAI_mode.place(rely = 0.05, relx = 0.6)
 VVI_mode.place(rely = 0.05, relx = 0.85)
 connected_label.place(rely = 0.008, relx = 0.025)
+
 
 root.mainloop() 
