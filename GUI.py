@@ -247,7 +247,6 @@ def program_frame():
 	else:
 		pass_wrong = tk.Label(canvas_log, text = "Wrong Password, please try again!", font = fontStyle2 ,bg = CANVAS_BACKGROUND_COLOR)
 		pass_wrong.place(relx = 0.26,rely = 0.55)
-		#print(USER_ON)
 		#print(USERNAME)
 		#print(PASSWORD)
 
@@ -406,6 +405,20 @@ def change_PW_res(r):
 		PW_scale.set(0.05)
 
 
+#USED TO SHOW ALL THE PARAMETER !! BEST TO KEEP THIS FUNCTION AT THE END OF ALL FUNCTIONS
+def show():
+	print("Show all the users and their passwords")
+	print(USERNAME)
+	print(PASSWORD)
+	print("AOO parameters: ")
+	print("\tLRL: " + str(AOO_params["LRL"]) + "\t\tURL: " + str(AOO_params["URL"]) + "\tAMP: " + str(AOO_params["AMP"]) + "\tPW: " + str(AOO_params["PW"]) + "\tRP: " + str(AOO_params["RP"]))
+	print("VOO parameters: ")
+	print("\tLRL: " + str(VOO_params["LRL"]) + "\t\tURL: " + str(VOO_params["URL"]) + "\tAMP: " + str(VOO_params["AMP"]) + "\tPW: " + str(VOO_params["PW"]) + "\tRP: " + str(VOO_params["RP"]))
+	print("AAI parameters: ")
+	print("\tLRL: " + str(AAI_params["LRL"]) + "\t\tURL: " + str(AAI_params["URL"]) + "\tAMP: " + str(AAI_params["AMP"]) + "\tPW: " + str(AAI_params["PW"]) + "\tRP: " + str(AAI_params["RP"]))
+	print("VVI parameters: ")
+	print("\tLRL: " + str(VVI_params["LRL"]) + "\t\tURL: " + str(VVI_params["URL"]) + "\tAMP: " + str(VVI_params["AMP"]) + "\tPW: " + str(VVI_params["PW"]) + "\tRP: " + str(VVI_params["RP"]))
+
 # Databases
 # Create a username database
 '''
@@ -431,6 +444,9 @@ Pacemaker_sign.place(relx = 0.1, rely = 0.15)
 Start = tk.Button(root, image = start_image, command = frame1)
 Start.place(relx = 0.76, rely=0.5)
 
+#Button used to show all parameters
+Show = tk.Button(root, text = "Show",font = tkFont.Font(size=5), command = show)
+Show.place(relx = 0.5, rely = 0.01)
 
 
 #User list front canvas
@@ -543,8 +559,8 @@ AAI_mode.place(rely=0.0475, relx = 0.5)
 VVI_mode.place(rely=0.0475, relx = 0.749)
 
 #Sliders to change the parameter values
-LRL_scale =Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Lower Rate Limtit", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=30, to=175, resolution=1, command=change_LRL_res)
-URL_scale =Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Upper Rate Limtit", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=30, to=175, resolution=5)
+LRL_scale =Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Lower Rate Limit", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=30, to=175, resolution=1, command=change_LRL_res)
+URL_scale =Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Upper Rate Limit", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=30, to=175, resolution=5)
 AMP_scale =Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Atrial Amplitude", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=0.0, to=5.0, resolution=0.05, command=change_AMP_res)
 PW_scale = Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Atrial Pulse Width", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=0, to=1.9, resolution=0.05,  command=change_PW_res)
 RP_scale = Scale(canvas_interface, orient=HORIZONTAL, length=600, width=35, sliderlength="60", label="Atrial Refractory Period", font = fontStyle4, troughcolor="white", relief=SUNKEN, bg="#80aaff", from_=150, to=500, resolution = 10)
@@ -565,8 +581,8 @@ RP_scale.set(250)
 att = LabelFrame(canvas_interface, text="Attributes", bg="white", fg="#990000", font = fontStyle5, height=419, width=335, labelanchor=N, relief=RAISED)
 
 #Display parameter values
-LRL_att = Label(att, text="Lower Rate Limiit:", font=fontStyle6, bg="white")
-URL_att = Label(att, text="Upper Rate Limiit:", font=fontStyle6, bg="white")
+LRL_att = Label(att, text="Lower Rate Limit:", font=fontStyle6, bg="white")
+URL_att = Label(att, text="Upper Rate Limit:", font=fontStyle6, bg="white")
 AMP_att = Label(att, text="Atrial Amplitude:", font=fontStyle6, bg="white")
 PW_att =  Label(att, text="Atrial Pulse Width:", font=fontStyle6, bg="white")
 RP_att =  Label(att, text="Atrial Refractory Period:", font=fontStyle6, bg="white")
