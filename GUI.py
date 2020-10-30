@@ -542,8 +542,8 @@ canvas_interface = tk.Canvas(root, height = HEIGHT-50, width = WIDTH, bg = CANVA
 
 #Show pacemaker connected status. Check if new device is connected
 connected = canvas_interface.create_oval(10,10,20,20,fill = "red")
-connected_label = tk.Label(canvas_interface, text = "Connected", font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
-Diff_Pacemaker = tk.Label(canvas_interface, text = "A New Pacemaker detected", font = tkFont.Font(family="Blackadder ITC", size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+connected_label = tk.Label(canvas_interface, text = "Not Connected", font = tkFont.Font(size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
+Diff_Pacemaker = tk.Label(canvas_interface, text = "A New Pacemaker detected", font = tkFont.Font(size=10), bg = CANVAS_BACKGROUND_COLOR, fg = "#990000")
 
 connected_label.place(rely = 0.008, relx = 0.025)
 
